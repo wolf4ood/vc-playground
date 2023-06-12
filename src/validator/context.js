@@ -147,33 +147,5 @@ export const contexts = {
         },
       },
     },
-  },
-  "https://example.com/issuer/123#key-0": {
-    "@context": ["https://w3id.org/security/suites/ed25519-2020/v1"],
-    id: "https://example.com/issuer/123#key-0",
-    type: "Ed25519VerificationKey2020",
-    controller: "https://example.com/issuer/123",
-    publicKeyMultibase: "z6Mkf5rGMoatrSj1f4CyvuHBeXJELe9RPdzo2PKGNCKVtZxP",
-  },
-  "https://example.com/issuer/123": {
-    "@context": [
-      "https://www.w3.org/ns/did/v1",
-      {
-        "@base": "did:example:123",
-      },
-    ],
-    id: "https://example.com/issuer/123",
-    verificationMethod: [
-      {
-        id: "#key-0",
-        type: "Ed25519VerificationKey2020",
-        controller: "did:example:123",
-        publicKeyMultibase: "z6Mkf5rGMoatrSj1f4CyvuHBeXJELe9RPdzo2PKGNCKVtZxP",
-      },
-    ],
-    authentication: ["#key-0"],
-    assertionMethod: ["https://example.com/issuer/123#key-0"],
-    capabilityDelegation: ["#key-0"],
-    capabilityInvocation: ["#key-0"],
-  },
+  }
 };

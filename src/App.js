@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CredentialEditor } from "./components/editor/Credential";
 import { ContextEditor } from "./components/editor/Context";
 import { Result } from "./components/alerts/Result";
@@ -7,7 +7,15 @@ import { Header } from "./components/Header";
 import * as ctx from "./validator/context";
 
 function App() {
-  const [contexts, setContexts] = useState(Object.assign({}, ctx.contexts));
+  let storedContext = localStorage.getItem("playgroundCtx");
+
+  let initialCtx;
+  if (storedContext != null) {
+    initialCtx = JSON.parse(storedContext);
+  } else {
+    initialCtx = Object.assign({}, ctx.contexts);
+  }
+  const [contexts, setContexts] = useState(initialCtx);
   const [currentTab, setCurrentTab] = useState("credential");
   const [errors, setErrors] = useState({});
 
@@ -17,6 +25,16 @@ function App() {
 
   const editorClassName = (tab) => {
     return tab === currentTab ? "h-full" : "hidden";
+  };
+
+  useEffect(() => {
+    var ctx = JSON.stringify(contexts);
+    localStorage.setItem("playgroundCtx", ctx);
+  }, [contexts]);
+
+  const onContextChange = (ctx) => {
+    localStorage.setItem("playgroundCtx", JSON.stringify(ctx));
+    setContexts(ctx);
   };
 
   return (
@@ -53,12 +71,12 @@ function App() {
               <ContextEditor
                 value={contexts}
                 className={editorClassName("context")}
-                onChange={setContexts}
+                onChange={onContextChange}
               />
             </div>
-            <div className="flex flex-row w-3/4 mx-auto pt-5 justify-center">
-              <Result result={errors} />
-            </div>
+          </div>
+          <div className="flex flex-row w-3/4 mx-auto mt-20 justify-center">
+            <Result result={errors} />
           </div>
         </div>
       </div>

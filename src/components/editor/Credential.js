@@ -14,6 +14,7 @@ export const CredentialEditor = (props) => {
     const credential = jsonParser(text);
     if (credential != null) {
       const result = await validate(credential, props.contexts);
+
       props.onError(result);
     }
   };

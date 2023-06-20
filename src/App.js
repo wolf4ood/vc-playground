@@ -24,7 +24,7 @@ function App() {
   };
 
   const editorClassName = (tab) => {
-    return tab === currentTab ? "h-full" : "hidden";
+    return tab === currentTab ? "h-3/4" : "hidden";
   };
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Result } from "../components/alerts/Result";
-import * as ctx from "../validator/context";
+import { defaultContexts } from "../contexts";
 import { CredentialEditor } from "../components/editor/Credential";
 import { ContextEditor } from "../components/editor/Context";
 
@@ -11,7 +11,7 @@ export const Verifier = () => {
   if (storedContext != null) {
     initialCtx = JSON.parse(storedContext);
   } else {
-    initialCtx = Object.assign({}, ctx.contexts);
+    initialCtx = Object.assign({}, defaultContexts);
   }
 
   const [contexts, setContexts] = useState(initialCtx);

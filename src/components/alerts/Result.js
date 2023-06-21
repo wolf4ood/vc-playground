@@ -1,11 +1,11 @@
 import { Success } from "./ok";
 import { Error } from "./error";
 
-export const Result = ({ result }) => {
+export const Result = ({ result, onClose }) => {
   let message;
   if (result.verified != null) {
     if (result.verified === true) {
-      message = <Success msg="Verifiable credentials verified" />;
+      message = <Success onClose={onClose} msg="Verifiable credentials verified" />;
     } else {
       let errors;
       if (result.results) {
@@ -17,7 +17,7 @@ export const Result = ({ result }) => {
       }
 
       let msg = `Failed to verify credentials: ${errors}`;
-      message = <Error msg={msg} />;
+      message = <Error onClose={onClose} msg={msg} />;
     }
   } else {
     message = <div />;

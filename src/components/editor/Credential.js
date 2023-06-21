@@ -10,6 +10,12 @@ export const CredentialEditor = (props) => {
     props.onError({ verified: false, results: [{ error: ex }] });
   });
 
+
+  let containerClass ="flex flex-col mx-auto w-full";
+  if (!props.visible) {
+    containerClass += " hidden";
+  }
+
   const onClick = async (changes) => {
     const credential = jsonParser(text);
     if (credential != null) {
@@ -28,9 +34,9 @@ export const CredentialEditor = (props) => {
     }
   };
   return (
-    <div className={props.className}>
-      <Editor value={text} className="h-full" onChange={setText} />
-      <div className="flex flex-row mx-auto pt-5 justify-end">
+    <div className={containerClass}>
+      <Editor value={text} className={props.className} onChange={setText} />
+      <div className="flex flex-row pt-5 justify-end">
         <div className="flex justify-end">
           <div>
             <button

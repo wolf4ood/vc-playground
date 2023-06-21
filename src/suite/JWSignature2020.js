@@ -48,7 +48,6 @@ export class JWSignature2020 extends LinkedDataSignature {
 
   async verifySignature({ verifyData, verificationMethod, proof }) {
 
-    console.log(verificationMethod);
 
     const key = await JsonWebKey.from(verificationMethod);
 

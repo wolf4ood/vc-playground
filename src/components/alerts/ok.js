@@ -1,3 +1,5 @@
+import { Close } from "../Icons";
+
 export const Success = (props) => {
   return (
     <div className="alert alert-success">
@@ -15,6 +17,14 @@ export const Success = (props) => {
         />
       </svg>
       <span>{props.msg}</span>
+      <div>
+        <button
+          onClick={props.onClose}
+          className="btn btn-circle btn-sm ml-2"
+        >
+          <Close />
+        </button>
+      </div>
     </div>
   );
 };

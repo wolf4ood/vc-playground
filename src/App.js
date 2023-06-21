@@ -23,9 +23,7 @@ function App() {
     return tab === currentTab ? "tab tab-active" : "tab";
   };
 
-  const editorClassName = (tab) => {
-    return tab === currentTab ? "h-3/4" : "hidden";
-  };
+  const editorsClass = "h-65vh";
 
   useEffect(() => {
     var ctx = JSON.stringify(contexts);
@@ -39,10 +37,10 @@ function App() {
 
   return (
     <div className="App">
-      <div className="h-screen">
-        <Header name="VC Playground" />
+      <Header name="VC Playground" />
+      <div className="h-90vh">
         <div className="container mx-auto h-full">
-          <div className="flex flex-col w-3/4 mx-auto py-5 h-3/4">
+          <div className="flex flex-col w-3/4 mx-auto py-5 h-80vh">
             <div className="flex justify-center">
               <div className="tabs tabs-boxed">
                 <a
@@ -62,21 +60,24 @@ function App() {
               </div>
             </div>
 
-            <div className="h-full pt-5">
+            <div className="flex mx-auto w-full h-full pt-5">
               <CredentialEditor
-                className={editorClassName("credential")}
+                className={editorsClass}
                 contexts={contexts}
                 onError={setErrors}
+                visible={currentTab === "credential"}
               />
+
               <ContextEditor
                 value={contexts}
-                className={editorClassName("context")}
+                className={editorsClass}
                 onChange={onContextChange}
+                visible={currentTab === "context"}
               />
             </div>
           </div>
-          <div className="flex flex-row w-3/4 mx-auto mt-20 justify-center">
-            <Result result={errors} />
+          <div className="flex flex-row w-3/4 mx-auto mt-10 justify-center">
+            <Result onClose={() => setErrors({})} result={errors} />
           </div>
         </div>
       </div>

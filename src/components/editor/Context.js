@@ -18,9 +18,10 @@ export const ContextEditor = (props) => {
   const [currentCtx, setCurrentCtx] = useState(initial);
   const [currentSelected, setCurrentSelected] = useState(selected);
 
-  const jsonParser = parse.bind(this, (ex) => {});
+  let initialValue = JSON.stringify(currentCtx, null, 2);
+  const [rawValue, setRawValue] = useState(initialValue);
 
-  let value = JSON.stringify(currentCtx, null, 2);
+  const jsonParser = parse.bind(this, (ex) => {});
 
   const onValueChange = (val) => {
     let newVal = jsonParser(val);
@@ -34,43 +35,79 @@ export const ContextEditor = (props) => {
   };
 
   const pretty = () => {
-    setCurrentCtx(Object.assign({}, currentCtx));
+    let rValue = JSON.stringify(contexts[currentSelected], null, 2);
+    setRawValue(rValue);
   };
 
   const onContextChange = (item) => {
     setCurrentSelected(item);
     setCurrentCtx(contexts[item]);
+    let rValue = JSON.stringify(contexts[item], null, 2);
+    setRawValue(rValue);
   };
 
   const onAdd = ({ key, value }) => {
     let newCtx = {};
     newCtx[key] = value;
-    setContexts(Object.assign(contexts, newCtx));
+    let c = Object.assign(contexts, newCtx);
+    setContexts(c);
     setCurrentCtx(value);
     setCurrentSelected(key);
+    props.onChange(c);
+    let rValue = JSON.stringify(value, null, 2);
+    setRawValue(rValue);
   };
+
 
   const onSwap = ({ prev, next }) => {
     let val = contexts[prev];
     delete contexts[prev];
     let newCtx = {};
     newCtx[next] = val;
-    setContexts(Object.assign(contexts, newCtx));
+    let c = Object.assign(contexts, newCtx);
+    setContexts(c);
     setCurrentCtx(val);
     setCurrentSelected(next);
+    props.onChange(c);
   };
 
-  return (
-    <div className={props.className}>
-      <Editor value={value} className="h-full" onChange={onValueChange} />
+  const onRemove = (item) => {
 
-      <div className="flex flex-row mx-auto pt-5 justify-between">
+    let newCtx = Object.assign(contexts,{});
+    delete newCtx[item];
+
+    var newSelected = Object.keys(newCtx)[0];
+    var newVal = newCtx[newSelected];
+    setContexts(newCtx);
+    setCurrentCtx(newVal);
+    setCurrentSelected(newSelected);
+    props.onChange(newCtx);
+    let rValue = JSON.stringify(newVal, null, 2);
+    setRawValue(rValue);
+    props.onChange(newCtx);
+  }
+
+  let containerClass = "flex flex-col mx-auto w-full";
+  if (!props.visible) {
+    containerClass += " hidden";
+  }
+
+  return (
+    <div className={containerClass}>
+      <Editor
+        value={rawValue}
+        className={props.className}
+        onChange={onValueChange}
+      />
+
+      <div className="flex flex-row mx-auto w-full pt-5 justify-between">
         <ContextSelect
           items={items}
           onChange={onContextChange}
           onAdd={onAdd}
           selected={currentSelected}
           onSwap={onSwap}
+          onRemove={onRemove}
         />
         <div className="flex justify-end">
           <div>

@@ -1,28 +1,55 @@
 import { useState } from "react";
-import { Add, Edit } from "./Icons";
+import { Add, Edit, Remove } from "./Icons";
 
-export const ContextSelect = ({ items, selected, onChange, onAdd, onSwap }) => {
+export const ContextSelect = ({ items, selected, onChange, onAdd, onSwap, onRemove }) => {
   let options = items.map((item) => <option key={item}>{item}</option>);
 
-  if (items.length > 0 && selected == null) {
+  if (items.length > 0 && selected === null) {
     selected = items[0];
   }
 
+  const newValue = { isNew: true, value: "" };
+  let currentValue = newValue;
+
+  if (selected) {
+    currentValue = { isNew: false, value: selected };
+  }
+
+  const [currentEditing, setCurrentEditing] = useState(currentValue);
   const [isOpened, setIsOpened] = useState(false);
-  const [current, setCurrent] = useState(selected);
 
   const onSelect = (item) => {
-    setCurrent(item.target.value);
     onChange(item.target.value);
   };
 
   const addNewContext = () => {
-    setCurrent("new_context");
-    onAdd({ key: "new_context", value: {} });
+    if (currentEditing.isNew) {
+      onAdd({ key: currentEditing.value, value: {} });
+      setCurrentEditing(newValue);
+    } else {
+      onSwap({ prev: selected, next: currentEditing.value });
+      setCurrentEditing(newValue);
+    }
   };
 
-  const dropDownClass =
-    "dropdown dropdown-top dropdown-end" + (isOpened ? "dropdown-open" : "");
+  const onContextAdd = () => {
+    setCurrentEditing(newValue);
+    setIsOpened(true);
+  };
+
+  const onContextRemove = () => {
+    setCurrentEditing(newValue);
+    onRemove(selected);
+  };
+
+  const onContextEdit = () => {
+    setCurrentEditing({ isNew: false, value: selected });
+    setIsOpened(true);
+  };
+
+  const onClose = () => {
+    setIsOpened(false);
+  };
 
   return (
     <div className="flex flex-row">
@@ -34,36 +61,68 @@ export const ContextSelect = ({ items, selected, onChange, onAdd, onSwap }) => {
         {options}
       </select>
 
-      <div className={dropDownClass}>
-        <button className="btn btn-circle btn-sm btn-outline ml-2">
-          <Edit />
-        </button>
-        <div className="dropdown-content card card-compact w-96 p-2 shadow bg-base-100 text-primary-content rounded-none mb-2">
-          <div className="card-body">
-            <input
-              type="text"
-              placeholder="Type here"
-              value={current}
-              onChange={(evt) => setCurrent(evt.target.value)}
-              className="input input-bordered input-primary w-full max-w-xs"
-            />
-            <div className="card-actions justify-end">
+      <button
+        onClick={() => onContextEdit()}
+        className="btn btn-circle btn-sm btn-outline ml-2"
+      >
+        <Edit />
+      </button>
+      <dialog
+        onCancel={onClose}
+        onClose={onClose}
+        open={isOpened}
+        className="modal"
+      >
+        <form method="dialog" className="modal-box">
+          <div className="flex flex-col">
+            <button
+              onClick={onClose}
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+            >
+              ✕
+            </button>
+            <h3 className="font-bold text-lg mx-auto">
+              Add or Edit context link
+            </h3>
+            <div className="flex justify-center">
+              <input
+                onChange={(evt) =>
+                  setCurrentEditing({
+                    isNew: currentEditing.isNew,
+                    value: evt.target.value,
+                  })
+                }
+                type="text"
+                value={currentEditing.value}
+                placeholder="Context link here"
+                className="input input-bordered input-primary w-full mt-2"
+              />
+            </div>
+            <div className="flex justify-end">
               <button
-                className="btn btn-sm btn-primary"
-                onClick={() => onSwap({ prev: selected, next: current })}
+                onClick={addNewContext}
+                className="mt-2 btn btn-sm btn-primary"
               >
                 Save
               </button>
             </div>
           </div>
-        </div>
-      </div>
-
+        </form>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
       <button
         className="btn btn-circle btn-sm btn-outline ml-2"
-        onClick={addNewContext}
+        onClick={() => onContextAdd()}
       >
         <Add />
+      </button>
+      <button
+        className="btn btn-circle btn-sm btn-outline ml-2"
+        onClick={() => onContextRemove()}
+      >
+        <Remove />
       </button>
     </div>
   );

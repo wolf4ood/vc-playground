@@ -1,16 +1,15 @@
 import jsigs from "jsonld-signatures";
 import { Ed25519VerificationKey2020 } from "@digitalbazaar/ed25519-verification-key-2020";
-import { JsonWebKey } from '@transmute/json-web-signature';
+import { JsonWebKey } from "@transmute/json-web-signature";
 
 const {
   suites: { LinkedDataSignature },
 } = jsigs;
 
-
 const SUITE_CONTEXT_URL = "https://w3id.org/security/suites/jws-2020/v1";
 
 export class JWSignature2020 extends LinkedDataSignature {
-  constructor({} = {}) {
+  constructor(params) {
     super({
       type: "JsonWebSignature2020",
       contextUrl: "https://w3id.org/security/suites/jws-2020/v1",
@@ -41,19 +40,16 @@ export class JWSignature2020 extends LinkedDataSignature {
     verificationMethod =
       typeof document === "string" ? JSON.parse(document) : document;
 
-
     await this.assertVerificationMethod({ verificationMethod });
     return verificationMethod;
   }
 
   async verifySignature({ verifyData, verificationMethod, proof }) {
-
-
     const key = await JsonWebKey.from(verificationMethod);
 
     let verifier = key.verifier();
 
-    return await verifier.verify({data: verifyData, signature: proof.jws})
+    return await verifier.verify({ data: verifyData, signature: proof.jws });
   }
 
   async assertVerificationMethod({ verificationMethod }) {

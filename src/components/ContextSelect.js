@@ -1,7 +1,15 @@
 import { useState } from "react";
 import { Add, Edit, Remove } from "./Icons";
+import { ContextAddDialog } from "./dialog/ContextAddDialog";
 
-export const ContextSelect = ({ items, selected, onChange, onAdd, onSwap, onRemove }) => {
+export const ContextSelect = ({
+  items,
+  selected,
+  onChange,
+  onAdd,
+  onSwap,
+  onRemove,
+}) => {
   let options = items.map((item) => <option key={item}>{item}</option>);
 
   if (items.length > 0 && selected === null) {
@@ -67,51 +75,17 @@ export const ContextSelect = ({ items, selected, onChange, onAdd, onSwap, onRemo
       >
         <Edit />
       </button>
-      <dialog
-        onCancel={onClose}
+
+      <ContextAddDialog
         onClose={onClose}
-        open={isOpened}
-        className="modal"
-      >
-        <form method="dialog" className="modal-box">
-          <div className="flex flex-col">
-            <button
-              onClick={onClose}
-              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            >
-              ✕
-            </button>
-            <h3 className="font-bold text-lg mx-auto">
-              Add or Edit context link
-            </h3>
-            <div className="flex justify-center">
-              <input
-                onChange={(evt) =>
-                  setCurrentEditing({
-                    isNew: currentEditing.isNew,
-                    value: evt.target.value,
-                  })
-                }
-                type="text"
-                value={currentEditing.value}
-                placeholder="Context link here"
-                className="input input-bordered input-primary w-full mt-2"
-              />
-            </div>
-            <div className="flex justify-end">
-              <button
-                onClick={addNewContext}
-                className="mt-2 btn btn-sm btn-primary"
-              >
-                Save
-              </button>
-            </div>
-          </div>
-        </form>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
+        isOpened={isOpened}
+        value={currentEditing.value}
+        onSave={addNewContext}
+        onChange={(value) =>
+          setCurrentEditing({ isNew: currentEditing.isNew, value: value })
+        }
+      ></ContextAddDialog>
+
       <button
         className="btn btn-circle btn-sm btn-outline ml-2"
         onClick={() => onContextAdd()}

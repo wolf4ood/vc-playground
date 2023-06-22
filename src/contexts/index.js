@@ -5,7 +5,7 @@ import Odrl from "./odrl.json";
 import Ed25519 from "./sec-ed25519-2020-v1.json";
 import Jws2020 from "./sec-jws-2020-v1.json";
 
-export const defaultContexts = {
+const defaultContexts = {
   "https://www.w3.org/2018/credentials/examples/v1": CredentialExample,
   "https://www.w3.org/2018/credentials/v1": Credential,
   "https://www.w3.org/ns/did/v1": Did,
@@ -13,3 +13,18 @@ export const defaultContexts = {
   "https://w3id.org/security/suites/ed25519-2020/v1": Ed25519,
   "https://www.w3.org/ns/odrl.jsonld": Odrl,
 };
+
+export const contexts = () => {
+  let storedContext = localStorage.getItem("playgroundCtx");
+  let initialCtx;
+  if (storedContext != null) {
+    initialCtx = JSON.parse(storedContext);
+  } else {
+    initialCtx = Object.assign({}, defaultContexts);
+  }
+  return initialCtx;
+};
+
+export const saveContexts = (ctx) => {
+    localStorage.setItem("playgroundCtx", JSON.stringify(ctx));
+}

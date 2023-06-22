@@ -14,13 +14,12 @@ export const ContextEditor = (props) => {
   }
 
   const [contexts, setContexts] = useState(props.value);
-
   const [currentCtx, setCurrentCtx] = useState(initial);
   const [currentSelected, setCurrentSelected] = useState(selected);
 
   let initialValue = JSON.stringify(currentCtx, null, 2);
-  const [rawValue, setRawValue] = useState(initialValue);
 
+  const [rawValue, setRawValue] = useState(initialValue);
   const jsonParser = parse.bind(this, (ex) => {});
 
   const onValueChange = (val) => {
@@ -87,10 +86,7 @@ export const ContextEditor = (props) => {
     props.onChange(newCtx);
   }
 
-  let containerClass = "flex flex-col mx-auto w-full";
-  if (!props.visible) {
-    containerClass += " hidden";
-  }
+  const containerClass = "flex flex-col mx-auto w-full";
 
   return (
     <div className={containerClass}>

@@ -10,11 +10,7 @@ export const CredentialEditor = (props) => {
     props.onError({ verified: false, results: [{ error: ex }] });
   });
 
-
-  let containerClass ="flex flex-col mx-auto w-full";
-  if (!props.visible) {
-    containerClass += " hidden";
-  }
+  const containerClass ="flex flex-col mx-auto w-full";
 
   const onClick = async (changes) => {
     const credential = jsonParser(text);

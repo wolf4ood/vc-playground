@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Editor } from "./Editor";
-import { validate } from "../../validator/validator";
+import { validate, validatePresentation } from "../../validator/validator";
 import { parse } from "../../validator/parse";
 
 export const CredentialEditor = (props) => {
@@ -10,13 +10,17 @@ export const CredentialEditor = (props) => {
     props.onError({ verified: false, results: [{ error: ex }] });
   });
 
-  const containerClass ="flex flex-col mx-auto w-full";
+  const containerClass = "flex flex-col mx-auto w-full";
 
   const onClick = async (changes) => {
     const credential = jsonParser(text);
     if (credential != null) {
-      const result = await validate(credential, props.contexts);
-
+      let result;
+      if (credential.type.includes("VerifiablePresentation")) {
+        result = await validatePresentation(credential, props.contexts);
+      } else {
+        result = await validate(credential, props.contexts);
+      }
       props.onError(result);
     }
   };

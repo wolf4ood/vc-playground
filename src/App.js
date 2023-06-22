@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="App">
       <Header name="VC Playground" />
-      <div className="h-90vh">
+      <div className="h-80vh">
         <Routes>
           <Route path="/" element={<Verifier />} />
           <Route path="/verifier" element={<Verifier />} />

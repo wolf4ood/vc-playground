@@ -2,6 +2,7 @@
   "name": "vc-playground",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://wolf4ood.github.io/vc-playground/",
   "dependencies": {
     "@codemirror/lang-json": "^6.0.1",
     "@digitalbazaar/ed25519-signature-2020": "^5.2.0",

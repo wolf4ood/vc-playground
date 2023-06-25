@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useContext} from "react";
 import { Editor } from "./Editor";
 import { validate, validatePresentation } from "../../validator/validator";
 import { parse } from "../../validator/parse";
+import { EditorContext } from "./EditorContext";
 
 export const CredentialEditor = (props) => {
-  const [text, setText] = useState("");
+  const { text, setText } = useContext(EditorContext);
 
   const jsonParser = parse.bind(this, (ex) => {
     props.onError({ verified: false, results: [{ error: ex }] });
@@ -13,6 +14,8 @@ export const CredentialEditor = (props) => {
   const containerClass = "flex flex-col mx-auto w-full";
 
   const onClick = async (changes) => {
+
+    console.log(text);
     const credential = jsonParser(text);
     if (credential != null) {
       let result;

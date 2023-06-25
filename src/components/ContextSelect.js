@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Add, Edit, Remove } from "./Icons";
+import { Add, Remove } from "./Icons";
 import { ContextAddDialog } from "./dialog/ContextAddDialog";
 
 export const ContextSelect = ({
@@ -71,9 +71,9 @@ export const ContextSelect = ({
 
       <button
         onClick={() => onContextEdit()}
-        className="btn btn-circle btn-sm btn-outline ml-2"
+        className="btn btn-sm btn-outline ml-2"
       >
-        <Edit />
+        Edit
       </button>
 
       <ContextAddDialog

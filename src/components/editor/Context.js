@@ -46,45 +46,43 @@ export const ContextEditor = (props) => {
   };
 
   const onAdd = ({ key, value }) => {
-    let newCtx = {};
+    let newCtx = Object.assign(contexts, {});
     newCtx[key] = value;
-    let c = Object.assign(contexts, newCtx);
-    setContexts(c);
+    setContexts(newCtx);
     setCurrentCtx(value);
     setCurrentSelected(key);
-    props.onChange(c);
+    props.onChange(newCtx);
     let rValue = JSON.stringify(value, null, 2);
     setRawValue(rValue);
   };
 
-
   const onSwap = ({ prev, next }) => {
     let val = contexts[prev];
     delete contexts[prev];
-    let newCtx = {};
+    let newCtx = Object.assign(contexts, {});
     newCtx[next] = val;
-    let c = Object.assign(contexts, newCtx);
-    setContexts(c);
+    setContexts(newCtx);
     setCurrentCtx(val);
     setCurrentSelected(next);
-    props.onChange(c);
+    props.onChange(newCtx);
   };
 
   const onRemove = (item) => {
-
-    let newCtx = Object.assign(contexts,{});
+    let newCtx = Object.assign(contexts, {});
     delete newCtx[item];
-
-    var newSelected = Object.keys(newCtx)[0];
-    var newVal = newCtx[newSelected];
     setContexts(newCtx);
-    setCurrentCtx(newVal);
-    setCurrentSelected(newSelected);
+
+    if (Object.keys(newCtx).length > 0) {
+      var newSelected = Object.keys(newCtx)[0];
+      var newVal = newCtx[newSelected];
+      setCurrentCtx(newVal);
+      setCurrentSelected(newSelected);
+
+      let rValue = JSON.stringify(newVal, null, 2);
+      setRawValue(rValue);
+    }
     props.onChange(newCtx);
-    let rValue = JSON.stringify(newVal, null, 2);
-    setRawValue(rValue);
-    props.onChange(newCtx);
-  }
+  };
 
   const containerClass = "flex flex-col mx-auto w-full";
 
